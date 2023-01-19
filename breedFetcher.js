@@ -4,12 +4,14 @@ const fetchBreedDescription = (breedName, callback) => {
   request(
     `https://api.thecatapi.com/v1/breeds/search?q=${breedName}`,
     (error, response, body) => {
-      const data = JSON.parse(body);
-      if (data.length > 1) {
-        throw new Error("multiple cat breeds found");
-      }
       if (error) {
         return callback((error, null));
+      }
+
+      const data = JSON.parse(body);
+      if (data.length > 1) {
+        callback(Error("multiple cat breeds found").message, null);
+        return;
       }
 
       const breed = data[0];
